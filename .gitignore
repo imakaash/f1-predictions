@@ -1,0 +1,59 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+.env
+
+# --- Conda ---
+# Exported environment locks (generated files, not source)
+conda-lock.yml
+
+# --- Project runtime artifacts ---
+# FastF1 API cache
+*/cache/
+cache/
+
+# Trained model files
+*/models/
+models/
+
+# Processed data (re-creatable by running the pipeline)
+*/data/
+data/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- Testing & coverage ---
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# --- Editors & OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- Secrets ---
+.env
+*.env
+secrets.json
