@@ -109,6 +109,7 @@ def fetch_canada_history() -> pd.DataFrame:
     out = pd.concat(frames, ignore_index=True)
     path = DATA_DIR / "canada_history.parquet"
     out.to_parquet(path)
+    out.to_csv(DATA_DIR / "canada_history.csv", index=False)
     log.info("Wrote %s (%d rows)", path, len(out))
     return out
 
@@ -130,6 +131,7 @@ def fetch_season_form() -> pd.DataFrame:
     out = pd.concat(frames, ignore_index=True)
     path = DATA_DIR / "season_form.parquet"
     out.to_parquet(path)
+    out.to_csv(DATA_DIR / "season_form.csv", index=False)
     log.info("Wrote %s (%d rows)", path, len(out))
     return out
 

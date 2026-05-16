@@ -145,6 +145,7 @@ def build_training() -> pd.DataFrame:
     df = pd.DataFrame(rows)
     path = DATA_DIR / "training.parquet"
     df.to_parquet(path)
+    df.to_csv(DATA_DIR / "training.csv", index=False)
     log.info("Wrote %s (%d rows, %d positives)", path, len(df), df["podium"].sum())
     return df
 
@@ -190,6 +191,7 @@ def build_predict_input() -> pd.DataFrame:
     df = pd.DataFrame(rows)
     path = DATA_DIR / "predict_input.parquet"
     df.to_parquet(path)
+    df.to_csv(DATA_DIR / "predict_input.csv", index=False)
     log.info("Wrote %s (%d rows)", path, len(df))
     return df
 
