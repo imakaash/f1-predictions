@@ -21,6 +21,10 @@ The pipeline:
 4. **Evaluates** with a time-aware holdout (no data leakage from future races).
 5. **Predicts the 2026 Canadian GP podium** — outputs each driver's probability of a top-3 finish.
 
+## Sample output
+
+![2026 Canadian GP podium prediction](assets/canada_2026_prediction.png)
+
 ## Quick start
 
 ```bash
