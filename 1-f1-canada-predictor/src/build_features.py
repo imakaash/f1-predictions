@@ -71,11 +71,20 @@ def _form_features_before(
     team_avg_finish = team_recent["finish_position"].mean() if not team_recent.empty else np.nan
     team_avg_points = team_recent["points"].mean() if not team_recent.empty else np.nan
 
+    # FP long-run pace trend across recent races (if available in the dataset).
+    fp_col = "fp_long_run_delta"
+    avg_fp_delta = (
+        driver_recent[fp_col].mean()
+        if not driver_recent.empty and fp_col in driver_recent.columns
+        else np.nan
+    )
+
     return {
         "form_avg_finish": avg_finish,
         "form_avg_qual": avg_qual,
         "form_dnf_rate": dnf_rate,
         "form_avg_points": avg_points,
+        "form_avg_fp_delta": avg_fp_delta,
         "team_form_avg_finish": team_avg_finish,
         "team_form_avg_points": team_avg_points,
     }
@@ -138,6 +147,12 @@ def build_training() -> pd.DataFrame:
                     (race_row["finish_position"] <= PODIUM_THRESHOLD)
                     and not race_row["dnf"]
                 ),
+                # Race-level enrichments (NaN if not loaded for that year)
+                "fp_long_run_delta": race_row.get("fp_long_run_delta", np.nan),
+                "top_speed_delta": race_row.get("top_speed_delta", np.nan),
+                "is_wet": race_row.get("is_wet", 0),
+                "air_temp": race_row.get("air_temp", np.nan),
+                "track_temp": race_row.get("track_temp", np.nan),
             }
         )
         rows.append(feats)
@@ -182,8 +197,15 @@ def build_predict_input() -> pd.DataFrame:
                 "driver": driver,
                 "team": team,
                 "year": TARGET_YEAR,
-                "grid": avg_qual,             # proxy
-                "qual_position": avg_qual,    # proxy
+                "grid": avg_qual,          # proxy until real quali available
+                "qual_position": avg_qual,
+                # Canada FP/quali not yet run — will be NaN until fetch_data
+                # is re-run after those sessions complete.
+                "fp_long_run_delta": np.nan,
+                "top_speed_delta": np.nan,
+                "is_wet": 0,
+                "air_temp": np.nan,
+                "track_temp": np.nan,
             }
         )
         rows.append(feats)

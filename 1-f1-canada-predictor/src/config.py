@@ -41,3 +41,4 @@ CURRENT_SEASON_ROUNDS_COMPLETED = [
 PODIUM_THRESHOLD = 3        # top-N finish counts as the positive class
 RANDOM_SEED = 42
 ROLLING_FORM_WINDOW = 3     # last N races for "recent form" features
+MIN_LONG_RUN_LAPS = 5      # FP stints shorter than this are excluded from pace estimate

@@ -58,7 +58,8 @@ def main() -> None:
     for c in feature_cols:
         X[c] = X[c].fillna(feature_medians.get(c))
 
-    proba = model.predict_proba(X)[:, 1]
+    is_ranker = artifact.get("is_ranker", False)
+    proba = model.predict(X) if is_ranker else model.predict_proba(X)[:, 1]
     df = df.assign(podium_prob=proba).sort_values("podium_prob", ascending=False)
 
     log.info("Predictions for %s %s GP using %s", TARGET_YEAR, TARGET_RACE, best_name)

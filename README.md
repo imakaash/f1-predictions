@@ -42,7 +42,3 @@ See each project's own README for a detailed usage guide.
 - **Jolpica-F1 / Ergast** — historical race results back to 2018 (auto-used by FastF1)
 
 Data is fetched and cached locally on first run. No API key is required.
-
-## License
-
-MIT. F1 data accessed through these libraries is unofficial and not affiliated with Formula 1 companies.

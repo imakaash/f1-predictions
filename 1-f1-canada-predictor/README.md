@@ -11,15 +11,21 @@ Built on:
 
 The pipeline:
 
-1. **Pulls historical race data** for past Canadian GPs (2018 → present) plus the current season's races so far.
-2. **Engineers features** like driver form (rolling avg finish), qualifying pace, team form, track-specific historical performance, grid position, and DNF rate.
-3. **Trains and compares 4 models** for podium prediction:
+1. **Pulls historical race data** for past Canadian GPs (2018 → present) plus the current season's races so far — including FP1/FP2 sessions, qualifying telemetry, and race-day weather.
+2. **Engineers features**:
+   - Driver form: rolling avg finish, qualifying pace, points, DNF rate
+   - FP1/FP2 long-run pace delta vs field median (largest missing signal in most F1 models)
+   - Race-day weather: rain flag, air temperature, track temperature
+   - Qualifying telemetry: per-driver top speed vs field median (straight-line advantage)
+   - Track-specific history: past Canada starts, avg finish, podiums — for driver and team
+3. **Trains and compares 5 models**:
    - Logistic Regression (baseline)
    - Random Forest
    - XGBoost
-   - LightGBM
-4. **Evaluates** with a time-aware holdout (no data leakage from future races).
-5. **Predicts the 2026 Canadian GP podium** — outputs each driver's probability of a top-3 finish.
+   - LightGBM (binary podium classifier)
+   - **LightGBM LambdaRank** — learning-to-rank on full finishing order
+4. **Evaluates** with time-aware leave-one-year-out CV — no data leakage from future races.
+5. **Predicts the 2026 Canadian GP** — outputs podium probabilities (classifiers) or full finishing-order scores (LambdaRank), picks the best model by top-3 hit rate.
 
 ## Sample output
 
@@ -37,7 +43,7 @@ python -m src.run_pipeline
 # Or step-by-step:
 python -m src.fetch_data        # downloads & caches race data
 python -m src.build_features    # builds the training dataset
-python -m src.train             # trains all 4 models, picks the best
+python -m src.train             # trains all 5 models, picks the best
 python -m src.predict           # outputs the predicted podium
 ```
 
@@ -67,14 +73,8 @@ f1-canada-predictor/
 
 ## Improving the model
 
-Ideas, roughly in order of bang-for-buck:
-
-1. Add **practice session pace** (FP1/FP2/FP3 long-run averages) — available via FastF1
-2. Add **weather forecast** for race day (Montreal is famously rain-prone)
-3. Use **telemetry-derived features**: top speed on the back straight, sector dominance
-4. Add a **Monte Carlo simulation** that samples DNF probability per driver
-5. Try a **listwise learning-to-rank** model (LightGBM `lambdarank`) on full finishing order, not just podium
-
-## License
-
-MIT. FastF1 and the underlying F1 data are unofficial and not associated with Formula 1 companies.
+1. Pull **full-season race history** for form features — currently form is approximated using Canada-only history; pulling every race of every season would give much richer rolling-form signals.
+2. Add a **Monte Carlo simulation** that samples DNF probability per driver to produce finishing-order distributions rather than point estimates.
+3. **Ensemble** the binary classifier and LambdaRank scores — combining podium probability with rank score often outperforms either alone.
+4. Add **FP3 / Sprint Qualifying pace** on sprint weekends where FP2 is replaced.
+5. Feed in a **weather forecast** for race day before sessions run — Montreal is famously rain-prone and wet-race prediction currently relies on historical averages.
