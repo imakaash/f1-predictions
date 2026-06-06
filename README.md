@@ -7,13 +7,15 @@ A collection of Formula 1 machine learning projects using open-source data from 
 | Project | Description |
 |---|---|
 | [1-f1-canada-predictor](1-f1-canada-predictor/README.md) | Predicts the top-3 finishers of the Canadian GP using XGBoost, LightGBM, Random Forest, and Logistic Regression |
+| [2-f1-monaco-predictor](2-f1-monaco-predictor/README.md) | Predicts the top-3 finishers of the Monaco GP — qualifying-heavy circuit with weather and track-history signals |
 
 ## Repository structure
 
 ```
 f1/
 ├── environment.yml               # shared conda environment (name: f1)
-└── 1-f1-canada-predictor/        # Canadian GP podium prediction pipeline
+├── 1-f1-canada-predictor/        # Canadian GP podium prediction pipeline
+└── 2-f1-monaco-predictor/        # Monaco GP podium prediction pipeline
     ├── src/                      # pipeline modules
     ├── notebooks/                # exploratory notebooks
     ├── data/                     # parquet files (git-ignored, created at runtime)
